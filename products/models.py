@@ -1,5 +1,9 @@
 from django.db import models
 
+from django.contrib.auth import get_user_model
+
+User = get_user_model()
+
 
 class Category(models.Model):
     name = models.CharField(max_length=150, unique=True)
@@ -29,3 +33,15 @@ class Product(models.Model):
     class Meta:
         verbose_name = 'Продукт'
         verbose_name_plural = 'Продукты'
+
+
+class Basket(models.Model):
+    user = models.ForeignKey(to=User, on_delete=models.CASCADE,
+                             related_name='baskets')
+    product = models.ForeignKey(to=Product, on_delete=models.CASCADE,
+                                related_name='products')
+    quantity = models.PositiveSmallIntegerField(default=0)
+    created_timestamp = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self) -> str:
+        return f"Корзина для {self.user.email} | Корзина {self.product.name}"
