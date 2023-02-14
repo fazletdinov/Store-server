@@ -3,6 +3,7 @@ from django.contrib.auth import (authenticate,
                                  login as login_base,
                                  logout as logout_base)
 from django.contrib import messages
+from django.contrib.auth.decorators import login_required
 
 from .forms import UserLoginForm, SignUpFrom, UserProfileForm
 from products.models import Basket
@@ -34,13 +35,16 @@ def signup(request):
     return render(request, 'users/signup.html', context=context)
 
 
+@login_required
 def profile(request):
     form = UserProfileForm(request.POST or None,
                            request.FILES or None,
                            instance=request.user)
     if form.is_valid():
         form.save()
-    baskets = Basket.objects.all()
+        return redirect('users:profile')
+    baskets = Basket.objects.filter(user=request.user)
+
     context = {'form': form, 'baskets': baskets}
     return render(request, 'users/profile.html', context=context)
 
