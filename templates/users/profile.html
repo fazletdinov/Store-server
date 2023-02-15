@@ -7,7 +7,9 @@
     <link href="{% static 'vendor/css/profile.css' %}" rel="stylesheet">
 {% endblock css %}
 
+
 {% block content %}
+{% if request.user == user %}
 <div class="container">
     <div class="row">
         <div class="col-lg-7">
@@ -66,4 +68,5 @@
         </div>
     </div>
 </div>
+{% endif %}
 {% endblock %}
