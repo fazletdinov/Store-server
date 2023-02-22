@@ -28,6 +28,8 @@ DEBUG = True
 
 ALLOWED_HOSTS = ['*']
 
+DOMAIN_NAME = 'http://127.0.0.1:8000'
+
 
 # Application definition
 
@@ -141,3 +143,7 @@ AUTH_USER_MODEL = 'users.CustomUser'
 LOGIN_REDIRECT_URL = 'home'
 LOGIN_URL = 'users:login'
 LOGOUT_REDIRECT_URL = 'home'
+
+# Sending email
+
+EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'

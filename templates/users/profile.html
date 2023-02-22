@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
 {% load static %}
 
-{% block title %}Store - Профиль{% endblock %}
+{% block title %}{{ title }}{% endblock %}
 
 {% block css %}
     <link href="{% static 'vendor/css/profile.css' %}" rel="stylesheet">
@@ -13,7 +13,7 @@
 <div class="container">
     <div class="row">
         <div class="col-lg-7">
-            <h4 class="mt-3 mb-3">Профиль</h4>
+            <h4 class="mt-3 mb-3">Личный кабинет</h4>
             <div class="col-lg-12 text-center">
                 <img width="200" height="200"
                      src="{% if user.image %} {{ user.image.url }} {% else %} {% static 'vendor/img/users/default_avatar.jpg' %} {% endif %}"

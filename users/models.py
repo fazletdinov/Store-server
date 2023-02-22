@@ -1,9 +1,16 @@
 from django.db import models
-from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin, AbstractUser
+from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin
 from django.utils.translation import gettext_lazy as _
 from django.utils import timezone
+from django.contrib.auth import get_user_model
+from django.core.mail import send_mail
+from django.urls import reverse
+from django.conf import settings
+from django.utils.timezone import now
 
 from users.managers import CustomUserManager
+
+# User = get_user_model()
 
 
 class CustomUser(AbstractBaseUser, PermissionsMixin):
@@ -41,3 +48,32 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
     def is_staff(self):
         return self.is_admin
 
+
+class EmailVerification(models.Model):
+    code = models.UUIDField(unique=True)
+    user = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
+    created = models.DateTimeField(auto_now_add=True)
+    expiration = models.DateTimeField()
+
+    def __str__(self) -> str:
+        return f'Emailverification object for {self.user.email}'
+
+    def send_verification_email(self):
+        link = reverse('users:email_verify',
+                       kwargs={'email': self.user.email,
+                               'code': self.code})
+        verification_link = f"{settings.DOMAIN_NAME}{link}"
+        subject = f"Подтверждение учетной записи для {self.user.email}"
+        message = ("Для подверждения учетной записи для {}"
+                   "перейдите по ссылке {}".format(self.user.email,
+                                                   verification_link))
+        send_mail(
+            subject=subject,
+            message=message,
+            from_email='from@example.com',
+            recipient_list=[self.user.email],
+            fail_silently=False,
+        )
+    
+    def is_expired(self):
+        return True if now() >= self.expiration else False

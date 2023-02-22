@@ -1,7 +1,7 @@
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
 
-from users.models import CustomUser
+from users.models import CustomUser, EmailVerification
 from users.forms import UserChangeForm, UserCreationForm
 from products.admin import BasketAdmin
 
@@ -11,7 +11,7 @@ class CustomUserAdmin(BaseUserAdmin):
     form = UserChangeForm
     add_form = UserCreationForm
 
-    list_display = ('email', 'phone', 'is_admin', 'is_active')
+    list_display = ('email', 'phone', 'is_admin', 'is_active', 'is_verify')
     inlines = (BasketAdmin,)
     list_filter = ('is_admin',)
     fieldsets = (
@@ -31,3 +31,9 @@ class CustomUserAdmin(BaseUserAdmin):
     ordering = ('email',)
     filter_horizontal = ('groups', 'user_permissions',)
 
+
+@admin.register(EmailVerification)
+class EmailVerification(admin.ModelAdmin):
+    list_display = ('code', 'user', 'expiration')
+    fields = ('code', 'user', 'expiration', 'created')
+    readonly_fields = ('created',)

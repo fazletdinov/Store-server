@@ -1,22 +1,27 @@
+import uuid
+from datetime import timedelta
+
 from django import forms
 from django.contrib.auth.forms import ReadOnlyPasswordHashField
-from django.contrib.auth import authenticate                            
+from django.contrib.auth import authenticate
 from django.core.exceptions import ValidationError
 from django.utils.translation import gettext_lazy as _
+from django.utils.timezone import now
 
-from .models import CustomUser
+
+from .models import CustomUser, EmailVerification
 
 
 class UserLoginForm(forms.Form):
     email = forms.EmailField(
         widget=forms.EmailInput(attrs={
-                'class': 'form-control py-4',
-                'placeholder': 'Введите email адрес'}),
+            'class': 'form-control py-4',
+            'placeholder': 'Введите email адрес'}),
     )
     password = forms.CharField(
         widget=forms.PasswordInput(attrs={
-                'class': 'form-control py-4', 'placeholder': 'Введите пароль'
-            }))
+            'class': 'form-control py-4', 'placeholder': 'Введите пароль'
+        }))
 
     error_messages = {
         'invalid_login': _(
@@ -26,6 +31,10 @@ class UserLoginForm(forms.Form):
         ),
         'inactive': _("This account is inactive."),
     }
+
+    def __init__(self, request=None, *args, **kwargs):
+        self.request = request
+        super().__init__(*args, **kwargs)
 
     def clean(self):
         email = self.cleaned_data.get('email')
@@ -62,7 +71,7 @@ class SignUpFrom(forms.ModelForm):
         'class': 'form-control py-4', 'placeholder': 'Введите email адрес'}))
     phone = forms.CharField(widget=forms.TextInput(attrs={
         'class': 'form-control py-4', 'placeholder': 'Введите номер телефона'},
-        ))
+    ))
     password = forms.CharField(widget=forms.PasswordInput(attrs={
         'class': 'form-control py-4', 'placeholder': 'Введите пароль'
     }))
@@ -76,6 +85,10 @@ class SignUpFrom(forms.ModelForm):
         user.set_password(self.cleaned_data["password"])
         if commit:
             user.save()
+        expiration = now() + timedelta(hours=48)
+        record = EmailVerification.objects.create(code=uuid.uuid4(), user=user,
+                                                  expiration=expiration)
+        record.send_verification_email()
         return user
 
 
