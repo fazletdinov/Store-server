@@ -1,9 +1,10 @@
-from django.test import Client, TestCase
-from django.contrib.auth import get_user_model
 from http import HTTPStatus
-from django.urls import reverse, resolve
 
-from ..models import Product, Category, Basket
+from django.contrib.auth import get_user_model
+from django.test import Client, TestCase
+from django.urls import resolve, reverse
+
+from ..models import Basket, Category, Product
 
 User = get_user_model()
 

@@ -1,15 +1,17 @@
-from django.contrib.messages.views import SuccessMessageMixin
-from django.contrib.auth import get_user_model
-from django.views.generic import CreateView, UpdateView, TemplateView
-from django.urls import reverse_lazy
 from typing import Any, Dict
+
+from django.contrib.auth import get_user_model
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.views import LoginView
+from django.contrib.messages.views import SuccessMessageMixin
 from django.shortcuts import get_object_or_404, redirect
+from django.urls import reverse_lazy
+from django.views.generic import CreateView, TemplateView, UpdateView
 
-from .forms import UserLoginForm, SignUpFrom, UserProfileForm
+from core.mixins.mixin import TitleMixin
 from products.models import Basket
-from core.mixin import TitleMixin
+
+from .forms import SignUpFrom, UserLoginForm, UserProfileForm
 from .models import EmailVerification
 
 User = get_user_model()
@@ -37,10 +39,10 @@ class UserProfileView(TitleMixin, LoginRequiredMixin, UpdateView):
     success_url = reverse_lazy('users:profile')
     title = 'Store - Личный кабинет'
 
-    def get_context_data(self, **kwargs: Any) -> Dict[str, Any]:
-        context = super().get_context_data(**kwargs)
-        context['baskets'] = Basket.objects.filter(user=self.object)
-        return context
+    # def get_context_data(self, **kwargs: Any) -> Dict[str, Any]:
+    #     context = super().get_context_data(**kwargs)
+    #     context['baskets'] = Basket.objects.filter(user=self.object)
+    #     return context
 
     def get_object(self, queryset=None):
         object = self.request.user

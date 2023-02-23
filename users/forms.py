@@ -2,12 +2,11 @@ import uuid
 from datetime import timedelta
 
 from django import forms
-from django.contrib.auth.forms import ReadOnlyPasswordHashField
 from django.contrib.auth import authenticate
+from django.contrib.auth.forms import ReadOnlyPasswordHashField
 from django.core.exceptions import ValidationError
-from django.utils.translation import gettext_lazy as _
 from django.utils.timezone import now
-
+from django.utils.translation import gettext_lazy as _
 
 from .models import CustomUser, EmailVerification
 

@@ -6,3 +6,4 @@ __pycache__
 static
 db.sqlite3
 staticfiles
+.flake8

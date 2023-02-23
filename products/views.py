@@ -1,10 +1,11 @@
-from django.shortcuts import get_object_or_404, redirect
-from django.contrib.auth.decorators import login_required
-from django.views.generic import TemplateView, ListView
 from typing import Any, Dict
 
-from products.models import Category, Product, Basket
-from core.mixin import TitleMixin
+from django.contrib.auth.decorators import login_required
+from django.shortcuts import get_object_or_404, redirect
+from django.views.generic import ListView, TemplateView
+
+from core.mixins.mixin import TitleMixin
+from products.models import Basket, Category, Product
 
 LIMIT_PAGE: int = 3
 

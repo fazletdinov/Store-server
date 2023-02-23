@@ -10,8 +10,8 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/3.2/ref/settings/
 """
 
-from pathlib import Path
 import os
+from pathlib import Path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -70,6 +70,8 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                'core.context_processors.year.year',
+                'core.context_processors.basket.baskets',
             ],
         },
     },
@@ -145,5 +147,8 @@ LOGIN_URL = 'users:login'
 LOGOUT_REDIRECT_URL = 'home'
 
 # Sending email
-
-EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+EMAIL_HOST = 'smtp.yandex.ru'
+EMAIL_HOST_USER = 'sstore-server@yandex.ru'
+EMAIL_HOST_PASSWORD = 'fvajdlwbfdeqmxdd'
+EMAIL_PORT = 465
+EMAIL_USE_SSL = True
