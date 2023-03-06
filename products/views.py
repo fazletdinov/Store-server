@@ -36,7 +36,9 @@ class ProductListView(TitleMixin, ListView):
 @login_required
 def basket_add(request, product_id):
     product = get_object_or_404(Product, id=product_id)
-    baskets = Basket.objects.filter(user=request.user, product=product)
+    baskets = Basket.objects.select_related('user', 'product').filter(
+        user=request.user, product=product
+    )
 
     if not baskets.exists():
         Basket.objects.create(user=request.user, product=product, quantity=1)

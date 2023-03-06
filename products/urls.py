@@ -6,7 +6,10 @@ app_name = 'products'
 
 urlpatterns = [
     path('', views.ProductListView.as_view(), name='index'),
-    path('category/<int:category_id>/', views.ProductListView.as_view(), name='category'),
-    path('baskets/add/<int:product_id>/', views.basket_add, name='basket_add'),
-    path('basket/remove/<int:basket_id>/', views.basket_remove, name='basket_remove')
+    path('category/<int:category_id>/', views.ProductListView.as_view(),
+         name='category'),
+    path('baskets/add/<int:product_id>/', views.basket_add,
+         name='basket_add'),
+    path('basket/remove/<int:basket_id>/', views.basket_remove,
+         name='basket_remove')
 ]

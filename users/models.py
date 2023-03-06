@@ -1,5 +1,4 @@
 from django.conf import settings
-from django.contrib.auth import get_user_model
 from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin
 from django.core.mail import send_mail
 from django.db import models
@@ -9,8 +8,6 @@ from django.utils.timezone import now
 from django.utils.translation import gettext_lazy as _
 
 from users.managers import CustomUserManager
-
-# User = get_user_model()
 
 
 class CustomUser(AbstractBaseUser, PermissionsMixin):
@@ -74,6 +71,6 @@ class EmailVerification(models.Model):
             recipient_list=[self.user.email],
             fail_silently=False,
         )
-    
+
     def is_expired(self):
         return True if now() >= self.expiration else False
