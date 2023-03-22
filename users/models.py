@@ -9,7 +9,6 @@ from django.utils.translation import gettext_lazy as _
 
 from users.managers import CustomUserManager
 
-
 class CustomUser(AbstractBaseUser, PermissionsMixin):
     email = models.EmailField(max_length=255, unique=True)
     phone = models.CharField(max_length=50)

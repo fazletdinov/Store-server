@@ -3,6 +3,7 @@ from typing import Any, Dict
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import get_object_or_404, redirect
 from django.views.generic import ListView, TemplateView
+from django.core.cache import cache
 
 from core.mixins.mixin import TitleMixin
 from products.models import Basket, Category, Product
@@ -25,11 +26,16 @@ class ProductListView(TitleMixin, ListView):
     def get_queryset(self):
         queryset = super().get_queryset()
         category_id = self.kwargs.get('category_id')
-        return queryset.filter(category_id=category_id) if category_id else queryset
+        return queryset.select_related().filter(category_id=category_id) if category_id else queryset
 
     def get_context_data(self, **kwargs: Any) -> Dict[str, Any]:
         context = super().get_context_data(**kwargs)
-        context['categories'] = Category.objects.all()
+        categories = cache.get('categories')
+        if not categories:
+            context['categories'] = Category.objects.all()
+            cache.set('categories', context['categories'], 30)
+        else:
+            context['categories'] = categories
         return context
 
 

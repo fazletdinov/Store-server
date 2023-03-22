@@ -1,15 +1,11 @@
-import uuid
-from datetime import timedelta
-
 from django import forms
 from django.contrib.auth import authenticate
 from django.contrib.auth.forms import ReadOnlyPasswordHashField
 from django.core.exceptions import ValidationError
-from django.utils.timezone import now
 from django.utils.translation import gettext_lazy as _
 
-from .models import CustomUser, EmailVerification
-
+from .models import CustomUser
+from .tasks import send_email_verify
 
 class UserLoginForm(forms.Form):
     email = forms.EmailField(
@@ -84,10 +80,7 @@ class SignUpFrom(forms.ModelForm):
         user.set_password(self.cleaned_data["password"])
         if commit:
             user.save()
-        expiration = now() + timedelta(hours=48)
-        record = EmailVerification.objects.create(code=uuid.uuid4(), user=user,
-                                                  expiration=expiration)
-        record.send_verification_email()
+        send_email_verify.delay(user.id)
         return user
 
 

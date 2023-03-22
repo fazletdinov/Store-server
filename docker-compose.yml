@@ -2,6 +2,7 @@ version: '3.8'
 
 services:
   web:
+    container_name: django-web
     build:
       context: ./
       dockerfile: Dockerfile
@@ -12,18 +13,32 @@ services:
       - ./.env.dev
     depends_on:
       - db
+      - redis
 
   db:
     image: postgres:12-alpine
     container_name: postgres
     volumes:
       - postgres_data:/var/lib/postgresql/data/
-    environment:
-      - POSTGRES_USER=store_user
-      - POSTGRES_PASSWORD=store_password
-      - POSTGRES_DB=store_db
+    env_file:
+      - ./.env.db
     ports:
       - 5432:5432
+
+  redis:
+    image: redis:6-alpine
+    container_name: redis
+    ports:
+      - 6379:6379
+
+  celery:
+    build: ./
+    container_name: celery
+    command: celery -A config worker -l INFO
+    depends_on:
+      - web
+      - db
+      - redis
 
 volumes:
   postgres_data:

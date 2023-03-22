@@ -58,7 +58,7 @@ class EmailVerificztionView(TitleMixin, TemplateView):
         user = get_object_or_404(User, email=self.kwargs.get('email'))
         email_verification = get_object_or_404(EmailVerification,
                                                user=user, code=code)
-        if email_verification and not email_verification.is_expired:
+        if email_verification and email_verification.is_expired:
             user.is_verify = True
             user.save()
         else:

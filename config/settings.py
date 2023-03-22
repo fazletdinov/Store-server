@@ -24,7 +24,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = os.environ.get("SECRET_KEY", default='django-insecure-l_x%yvb4r=c8o&4^qo4g)%)h9p1&#a8eg8f7m^_0^_lpca%%%j')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = int(os.environ.get("DEBUG", default=0))
+DEBUG = True
 
 ALLOWED_HOSTS = ['*']
 
@@ -46,6 +46,7 @@ INSTALLED_APPS = [
     'allauth.account',
     'allauth.socialaccount',
     'allauth.socialaccount.providers.github',
+    'debug_toolbar',
 
     'products.apps.ProductsConfig',
     'users.apps.UsersConfig',
@@ -59,6 +60,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'debug_toolbar.middleware.DebugToolbarMiddleware',
 ]
 
 ROOT_URLCONF = 'config.urls'
@@ -157,11 +159,14 @@ LOGIN_URL = 'users:login'
 LOGOUT_REDIRECT_URL = 'home'
 
 # Sending email
+
 EMAIL_HOST = 'smtp.yandex.ru'
 EMAIL_HOST_USER = 'sstore-server@yandex.ru'
-EMAIL_HOST_PASSWORD = 'fvajdlwbfdeqmxdd'
+EMAIL_HOST_PASSWORD = 'egmdzpknjrbreokw'
 EMAIL_PORT = 465
 EMAIL_USE_SSL = True
+
+# EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 
 # OAuth
 AUTHENTICATION_BACKENDS = [
@@ -185,3 +190,26 @@ SOCIALACCOUNT_PROVIDERS = {
         ],
     }
 }
+
+# django-debug-toolbar
+INTERNAL_IPS = [
+    '127.0.0.1',
+    'localhost',
+    'django-web',
+]
+
+# redis caches
+CACHES = {
+    "default": {
+        "BACKEND": "django_redis.cache.RedisCache",
+        "LOCATION": "redis://redis:6379/1",
+        "OPTIONS": {
+            "CLIENT_CLASS": "django_redis.client.DefaultClient",
+        }
+    }
+}
+
+# celery
+
+CELERY_BROKER_URL = 'redis://redis:6379'
+CELERY_RESULT_BACKEND = 'redis://redis:6379'

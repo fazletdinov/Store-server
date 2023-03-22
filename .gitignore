@@ -8,3 +8,8 @@ db.sqlite3
 staticfiles
 .flake8
 .env.dev.idea
+.idea/
+.idea
+.idea/workspace.xml.idea
+.env.db
+.env.dev
