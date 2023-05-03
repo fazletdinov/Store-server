@@ -11,7 +11,7 @@ class CustomUserAdmin(BaseUserAdmin):
     form = UserChangeForm
     add_form = UserCreationForm
 
-    list_display = ('email', 'phone', 'is_admin', 'is_active', 'is_verify')
+    list_display = ('id', 'email', 'phone', 'is_admin', 'is_active', 'is_verify')
     inlines = (BasketAdmin,)
     list_filter = ('is_admin',)
     fieldsets = (
@@ -30,6 +30,7 @@ class CustomUserAdmin(BaseUserAdmin):
     search_fields = ('email',)
     ordering = ('email',)
     filter_horizontal = ('groups', 'user_permissions',)
+    list_display_links = ('id', 'email')
 
 
 @admin.register(EmailVerification)

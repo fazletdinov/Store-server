@@ -12,8 +12,9 @@ then
 fi
 
  python manage.py flush --no-input
+# python manage.py makemigrations
  python manage.py migrate
- python manage.py loaddata products/fixture/category.json
- python manage.py loaddata products/fixture/product.json
+ python manage.py loaddata products/fixture/products_db.json
+# python manage.py loaddata products/fixture/product.json
 exec "$@"
 

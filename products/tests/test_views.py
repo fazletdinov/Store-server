@@ -2,7 +2,7 @@ from django.contrib.auth import get_user_model
 from django.test import Client, TestCase
 from django.urls import reverse
 
-from ..models import Basket, Category, Product
+from ..models import Basket, Product, Category
 
 User = get_user_model()
 
@@ -20,7 +20,7 @@ class ProductsViewTest(TestCase):
             description='Test description',
             price=10.5,
             quantity=1,
-            image='/media/products_images/Adidas-hoodie.png',
+            image='/media/images/Adidas-hoodie.png',
             category=cls.category,
         )
 
@@ -58,11 +58,11 @@ class ProductsViewTest(TestCase):
         self.assertEqual(product_description, 'Test description')
         self.assertEqual(product_price, 10.5)
         self.assertEqual(product_quantity, 1)
-        self.assertEqual(product_image, '/media/products_images/Adidas-hoodie.png')
+        self.assertEqual(product_image, '/media/images/Adidas-hoodie.png')
         self.assertEqual(product_category, self.category)
         self.assertEqual(response.context_data['title'], 'Store - Каталог')
 
-    def test_products_category_list_show_correct_context(self):
+    def test_products_genre_list_show_correct_context(self):
         response = self.client.get(reverse('products:category',
                                            kwargs={'category_id': ProductsViewTest.category.id}))
         first_obj = response.context.get('products')[0]

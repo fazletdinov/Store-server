@@ -43,7 +43,7 @@ class ProductsModelTest(TestCase):
     def setUp(self) -> None:
         self.str_product = f"Продукт: {self.product.name} | Категория: {self.category.name}"
         self.str_category = self.category.name
-        self.str_basket = f"Корзина для {self.basket.user.email} | Корзина {self.product.name}"
+        self.str_basket = f"Корзина для {self.basket.user.email} | Корзина {self.category.name}"
         self.sum_quantity_and_price = 5 * 24.5
         self.total_sum_test = (5 * 24.5) + (10 * 20.5)
         self.total_quantity_test = 5 + 10

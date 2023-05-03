@@ -4,8 +4,8 @@ from django.contrib.auth.forms import ReadOnlyPasswordHashField
 from django.core.exceptions import ValidationError
 from django.utils.translation import gettext_lazy as _
 
-from .models import CustomUser
-from .tasks import send_email_verify
+from users.models import CustomUser
+from users.tasks import send_email_verify
 
 class UserLoginForm(forms.Form):
     email = forms.EmailField(
@@ -80,9 +80,11 @@ class SignUpFrom(forms.ModelForm):
         user.set_password(self.cleaned_data["password"])
         if commit:
             user.save()
-        send_email_verify.delay(user.id)
+        print(user.email)
+        # user_id = {"user_id": user.id}
+        send_email_verify.delay(user.email)
+        # send_email_verify.delay(user.id)
         return user
-
 
 class UserCreationForm(forms.ModelForm):
     password1 = forms.CharField(label='Пароль', widget=forms.PasswordInput)

@@ -28,7 +28,7 @@ class ProductUrlsTest(TestCase):
             name='Тест продукт',
             category=cls.category,
             price=23.56,
-            image='/media/products_images/Adidas-hoodie.png'
+            image='/media/images/Adidas-hoodie.png'
         )
         cls.basket = Basket.objects.create(
             user=cls.author,
@@ -49,9 +49,9 @@ class ProductUrlsTest(TestCase):
 
         cls.url_redirect_unauthentication_user = {
             f'/products/baskets/add/{cls.product.id}/':
-                reverse('users:login') + f'?next=/products/baskets/add/{cls.product.id}/',
+                reverse('users:login') + f'?next=/books/baskets/add/{cls.product.id}/',
             f'/products/basket/remove/{cls.basket.id}/':
-                reverse('users:login') + f'?next=/products/basket/remove/{cls.basket.id}/',
+                reverse('users:login') + f'?next=/books/basket/remove/{cls.basket.id}/',
         }
 
         cls.url_tamplate_use = {

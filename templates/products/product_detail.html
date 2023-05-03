@@ -1,0 +1,91 @@
+{% extends 'base.html' %}
+{% load static humanize %}
+
+{% block title %}{{ title }}{% endblock %}
+
+{% block css %}
+    <link href="{% static 'vendor/css/products.css' %}" rel="stylesheet">
+{% endblock %}
+
+{% block content %}
+
+<div class="container">
+
+    <div class="row">
+        <div class="col-lg-3">
+            <div class="card h-100">
+              <a href="#">
+                  <img class="card-img-top"
+                       src="{{ product.image.url }}"
+                       alt="">
+              </a>
+             </div>
+        </div>
+        <div class="col-lg-9 col-md-6 mb-4">
+<!--        <div class="col-lg-9">-->
+            <div class="row">
+<!--                <div class="col-lg-9 col-md-6 mb-4">-->
+                    <div class="card h-100">
+                        <div class="card-body">
+                            <h4 class="card-title">
+                                <a href="{% url 'products:product_detail' product.id %}">{{ product.name }}</a>
+                            </h4>
+                            <a href="{% url 'products:category' product.category.id %}"><h5>Категория: {{ product.category.name }}</h5></a>
+                            <h5>Автор: {{ product.author }}</h5>
+                            <h5>Цена: {{ product.price|intcomma }}</h5>
+                            <p class="card-text">{{ product.description }}</p>
+                            <h5><a href="{% url 'products:download_file' product.id %}" download>
+                                Скачать книгу в формате Pdf</a></h5>
+                        </div>
+                        <div class="card-footer text-center">
+                            <a class="btn btn-outline-success" href="{% url 'products:basket_add' product.id %}">
+                                Получить в бумажном переплете
+                            </a>
+                        </div>
+                        {% if user.is_authenticated %}
+                            <div class="card my-9">
+                                <h5 class="card-header">Добавить комментарий:</h5>
+                                <div class="card-body">
+                                    <form method="post" action="{% url 'products:add_comments' product.id %}">
+                                        {% csrf_token %}
+                                        <div class="form-group md-4">
+                                            {{ form.text }}
+                                        </div>
+                                    <button type="submit" class="btn btn-primary">Отправить</button>
+                                    </form>
+                                 </div>
+                            </div>
+                        {% endif %}
+
+                        {% for comment in comments %}
+                            <div class="media mb-4">
+                                <div class="media-body">
+                                    <h5 class="mt-0">
+                                    <a href="{% url 'users:profile' %}">
+                                        {{ comment.author.email }}
+                                    </a>
+                                    {{ comment.created }}
+                                    </h5>
+                                    <p>
+                                        {{ comment.text }}
+                                    </p>
+                                </div>
+                            </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+</div>
+{% endblock %}
+
+{% block footer %}
+<footer class="py-5 bg-dark">
+    <div class="container">
+        <p class="m-0 text-center text-white">Copyright &copy; Store {{ year }}</p>
+    </div>
+</footer>
+{% endblock %}

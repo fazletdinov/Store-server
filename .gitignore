@@ -13,3 +13,4 @@ staticfiles
 .idea/workspace.xml.idea
 .env.db
 .env.dev
+.env.db.celery
